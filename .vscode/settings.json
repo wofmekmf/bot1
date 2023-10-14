@@ -1,0 +1,10 @@
+{
+  "workbench.colorCustomizations": {
+    "[*]": {
+      "editorIndentGuide.activeBackground1": "#dc13ff",
+      "editorIndentGuide.background1": "#e4d86a"
+    },
+    "minimap.background": "#00000000",
+    "scrollbar.shadow": "#00000000"
+  }
+}
