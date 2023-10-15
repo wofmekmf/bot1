@@ -15,14 +15,11 @@ export const transferQuestion3 = new StatelessQuestion<BotContext>('transfer_que
     const token_address = ctx.session.transfer.token_address
     const wallet_address = ctx.session.transfer.wallet_address
     let decimals = 9
+    console.log("text is %O", text);
     if (token_address !== 'SOL') {
-        const { data } = await get<{ data: TokenMeta | Err }>('/token', { token: text })
-        if ('errno' in data) {
-            ctx.reply(data.errmsg)
-            return
-        }
-        decimals = data.decimals
+        decimals = ctx.session.transfer.decimals
     }
+    console.log("decimals is ", decimals)
     const amount = n * Math.pow(10, decimals)
     const response = await post<{ data: { tx: string } }>('/transfer', {
         uid: chat_id,

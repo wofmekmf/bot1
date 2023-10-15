@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 
 export const mainMenuText = async (ctx: BotContext) => {
     return `
-·Welcome to Solana Wallet Bot
+·Welcome to @Sofa6bot!
 ${await yourWalletText(ctx)}
   `.trim()
 }
