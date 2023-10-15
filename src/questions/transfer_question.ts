@@ -17,6 +17,8 @@ export const transferQuestion = new StatelessQuestion<BotContext>('transfer_ques
         if ('errno' in data) {
             ctx.reply(data.errmsg)
             return
+        } else {
+            ctx.session.transfer.decimals = data.decimals
         }
     }
     ctx.session.transfer.token_address = text

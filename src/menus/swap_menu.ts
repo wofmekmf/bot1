@@ -19,7 +19,7 @@ export const swapMenu = createMenu('swap_menu', { fingerprint })
         }
     )
     .text(
-        ctx => `Amount: ${ctx.session.swap.pay_amount.gt(0) ? ctx.session.swap.pay_amount.toFixed(0) : '-'}`,
+        ctx => `Amount: ${ctx.session.swap.pay_amount.gt(0) ? ctx.session.swap.pay_amount.toString(10) : '-'}`,
         ctx => {
             swapPayAmountQuestion.replyWithMarkdown(ctx, 'Please enter the token amount you want to pay.')
         }

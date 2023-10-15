@@ -16,7 +16,7 @@ export const balanceQuestion = new StatelessQuestion<BotContext>('balance_questi
     if ('errno' in data) {
         ctx.reply(data.errmsg)
         return
-    }
+    } 
     const chat_id = ctx.chat?.id
     const response = await get<{ data: { sol_balance: number; token: string; token_balance: number } }>('/balance', {
         uid: chat_id,
@@ -31,7 +31,7 @@ export const balanceQuestion = new StatelessQuestion<BotContext>('balance_questi
         }
     })
     const balance = response?.data.token_balance ?? 0
-    const real_balance = balance / Math.pow(10, text === 'SOL' ? 9 : data.decimals)
+    const real_balance = balance;//balance / Math.pow(10, text === 'SOL' ? 9 : data.decimals)
     await ctx.reply(`Your Balance: ${real_balance} ${data.symbol}`, {
         disable_web_page_preview: true,
         parse_mode: 'Markdown',
