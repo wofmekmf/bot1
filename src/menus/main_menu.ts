@@ -19,17 +19,6 @@ export const mainMenu = createMenu('main_menu', { fingerprint })
         const text = 'Please enter the token address you want to transfer.'
         return transferQuestion.replyWithMarkdown(ctx, text)
     })
-    .submenu('Swap', 'swap_menu', async ctx => {
-        ctx.session.swap.pay_amount = new BigNumber(0)
-        ctx.session.swap.pay_token = ''
-        ctx.session.swap.receive_token = ''
-        ctx.session.swap.message_id = ctx.msg?.message_id ?? 0
-        const text = await swapMenuText(ctx)
-        await ctx.editMessageText(text, {
-            parse_mode: 'Markdown',
-            disable_web_page_preview: true,
-        })
-    })
     .row()
     .text('WrapSOL', ctx => {
         wrapSolQuestion.replyWithMarkdown(ctx, 'Please enter the amount you want to swap SOL for WSOL.')
@@ -45,6 +34,17 @@ export const mainMenu = createMenu('main_menu', { fingerprint })
 View [Transaction hash](https://solscan.io/tx/${tx}).
 `
         await ctx.reply(messageText, { disable_web_page_preview: true, parse_mode: 'Markdown' })
+    })
+    .submenu('Swap', 'swap_menu', async ctx => {
+        ctx.session.swap.pay_amount = new BigNumber(0)
+        ctx.session.swap.pay_token = ''
+        ctx.session.swap.receive_token = ''
+        ctx.session.swap.message_id = ctx.msg?.message_id ?? 0
+        const text = await swapMenuText(ctx)
+        await ctx.editMessageText(text, {
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true,
+        })
     })
     .row()
 

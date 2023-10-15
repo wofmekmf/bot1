@@ -1,7 +1,7 @@
 import { StatelessQuestion } from '@grammyjs/stateless-question'
 import { clearAndNotice, handleCommonError } from '@/bot/common'
 import { BotContext } from '@/bot/context'
-import { post } from '@/lib/http'
+import { get, post } from '@/lib/http'
 
 export const transferQuestion3 = new StatelessQuestion<BotContext>('transfer_question_3', async ctx => {
     const text = ctx.message.text?.trim() ?? ''
@@ -14,9 +14,19 @@ export const transferQuestion3 = new StatelessQuestion<BotContext>('transfer_que
     const chat_id = ctx.chat?.id
     const token_address = ctx.session.transfer.token_address
     const wallet_address = ctx.session.transfer.wallet_address
+    let decimals = 9
+    if (token_address !== 'SOL') {
+        const { data } = await get<{ data: TokenMeta | Err }>('/token', { token: text })
+        if ('errno' in data) {
+            ctx.reply(data.errmsg)
+            return
+        }
+        decimals = data.decimals
+    }
+    const amount = n * Math.pow(10, decimals)
     const response = await post<{ data: { tx: string } }>('/transfer', {
         uid: chat_id,
-        amount: n,
+        amount,
         token: token_address === 'SOL' ? undefined : token_address,
         to: wallet_address,
     }).catch(handleCommonError(ctx))

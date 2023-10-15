@@ -1,5 +1,6 @@
 import { BotContext } from '@/bot/context'
 import { get, post } from '@/lib/http'
+import BigNumber from 'bignumber.js'
 
 export const mainMenuText = async (ctx: BotContext) => {
     return `

@@ -1,6 +1,6 @@
 import { createMenu, fingerprint, handleCommonError } from '@/bot/common'
 import { BotContext } from '@/bot/context'
-import { post } from '@/lib/http'
+import { get, post } from '@/lib/http'
 import { balanceQuestion } from '@/questions/balance_question'
 import { swapPayAmountQuestion } from '@/questions/swap_pay_amount_question'
 import { swapPayTokenQuestion } from '@/questions/swap_pay_token_question'
@@ -8,7 +8,6 @@ import { swapReceiveTokenQuestion } from '@/questions/swap_receive_token_questio
 import { transferQuestion } from '@/questions/transfer_question'
 import { unwrapSolQuestion } from '@/questions/unwrap_sol_question'
 import { wrapSolQuestion } from '@/questions/wrap_sol_question'
-
 
 export const swapMenu = createMenu('swap_menu', { fingerprint })
     .text('↗️ You Pay ↗️')
@@ -42,9 +41,19 @@ export const swapMenu = createMenu('swap_menu', { fingerprint })
             ctx.reply('Please fill in the required fields.')
             return
         }
+        let decimals = 9
+        if (pay_token !== 'SOL') {
+            const { data } = await get<{ data: TokenMeta | Err }>('/token', { token: pay_token })
+            if ('errno' in data) {
+                ctx.reply(data.errmsg)
+                return
+            }
+            decimals = data.decimals
+        }
+        const amount_in = pay_amount.multipliedBy(Math.pow(10, decimals)).toNumber()
         const response = await post<{ data: { tx: string } }>('/swap', {
             uid: chat_id,
-            amount_in: pay_amount.toNumber(),
+            amount_in,
             a_mint: pay_token,
             b_mint: receive_token,
         }).catch(handleCommonError(ctx))
