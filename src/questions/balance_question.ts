@@ -31,7 +31,8 @@ export const balanceQuestion = new StatelessQuestion<BotContext>('balance_questi
         }
     })
     const balance = response?.data.token_balance ?? 0
-    await ctx.reply(`Your Balance: ${balance * Math.pow(10, data.decimals)} ${data.symbol}`, {
+    const real_balance = balance / Math.pow(10, text === 'SOL' ? 9 : data.decimals)
+    await ctx.reply(`Your Balance: ${real_balance} ${data.symbol}`, {
         disable_web_page_preview: true,
         parse_mode: 'Markdown',
     })

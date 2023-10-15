@@ -55,19 +55,3 @@ View [Transaction hash](https://solscan.io/tx/${tx}).`
         await ctx.reply(messageText, { disable_web_page_preview: true, parse_mode: 'Markdown' })
     })
     .row()
-    .text('WrapSOL', ctx => {
-        wrapSolQuestion.replyWithMarkdown(ctx, 'Please enter the amount you want to swap SOL for WSOL.')
-    })
-    .text('UnwrapSOL', async ctx => {
-        const response = await post<{ data: { tx: string } }>('/unwrapsol', { uid: ctx.chat?.id ?? 0 }).catch(
-            handleCommonError(ctx)
-        )
-        const tx = response.data.tx
-        // unwrapSolQuestion.replyWithMarkdown(ctx, 'Please enter the amount you want to swap WSOL for SOL.')
-        const messageText = `
-✅ Swap transaction successful!
-View [Transaction hash](https://solscan.io/tx/${tx}).
-`
-        await ctx.reply(messageText, { disable_web_page_preview: true, parse_mode: 'Markdown' })
-    })
-    .row()

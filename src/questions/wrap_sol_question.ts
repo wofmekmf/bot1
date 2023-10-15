@@ -1,7 +1,7 @@
 import { StatelessQuestion } from '@grammyjs/stateless-question'
 import { clearAndNotice, handleCommonError } from '@/bot/common'
 import { BotContext } from '@/bot/context'
-import { post } from '@/lib/http'
+import { get, post } from '@/lib/http'
 import { transferQuestion2 } from '@/questions/transfer_question_2'
 
 export const wrapSolQuestion = new StatelessQuestion<BotContext>('wrap_sol_question', async ctx => {
@@ -12,8 +12,9 @@ export const wrapSolQuestion = new StatelessQuestion<BotContext>('wrap_sol_quest
         await clearAndNotice(ctx, text)
         return
     }
+    const amount_in = n * Math.pow(10, 9)
     const chat_id = ctx.chat?.id ?? 0
-    const response = await post<{ data: { tx: string } }>('/wrapsol', { uid: chat_id, amount_in: n }).catch(
+    const response = await post<{ data: { tx: string } }>('/wrapsol', { uid: chat_id, amount_in }).catch(
         handleCommonError(ctx)
     )
     const tx = response.data.tx
